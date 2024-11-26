@@ -22,11 +22,19 @@ export default function CountryChoicebox() {
           htmlFor={country}
           className={cn(
             "flex h-16 items-center justify-between rounded-md border bg-white px-6 capitalize hover:cursor-pointer",
-            selectedCountry === country && "border-primary",
+            selectedCountry === country &&
+              "border-blue-400 bg-blue-50 text-blue-600",
           )}
         >
           <span className="text-sm">{country}</span>
-          <RadioGroupItem value={country} id={country} className="h-4 w-4" />
+          <RadioGroupItem
+            value={country}
+            id={country}
+            className={cn("h-4 w-4 text-inherit", {
+              "border-blue-600 bg-white fill-blue-600 text-blue-600":
+                selectedCountry === country,
+            })}
+          />
         </Label>
       ))}
     </RadioGroup>
