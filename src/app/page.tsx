@@ -1,13 +1,10 @@
 import CountryChoicebox from "@/components/country-choicebox";
 import { Button } from "@/components/ui/button";
+import { getQuestion } from "@/lib/actions";
 import Image from "next/image";
 
 export default async function Home() {
-  const response = await fetch(
-    "https://restcountries.com/v3.1/name/netherlands",
-  );
-  const result = await response.json();
-  const country = result[0];
+  const { country, choices } = await getQuestion();
 
   return (
     <main className="container mx-auto max-w-2xl px-4 py-16 sm:py-24">
@@ -17,9 +14,9 @@ export default async function Home() {
         alt="Flag"
         width={288}
         height={192}
-        className="mt-16 rounded-md"
+        className="mt-16 aspect-video h-48 rounded-md object-cover"
       />
-      <CountryChoicebox />
+      <CountryChoicebox choices={choices} />
       <div className="mt-16 flex w-full items-center justify-between">
         <Button variant="secondary" size="lg">
           Skip
