@@ -1,7 +1,7 @@
 const API_URL = `${
   process.env.NODE_ENV === "development"
     ? "http://localhost:3000"
-    : process.env.VERCEL_PROJECT_PRODUCTION_URL
+    : "https://" + process.env.VERCEL_PROJECT_PRODUCTION_URL
 }/api/countries`;
 const NUMBER_OF_CHOICES = 4;
 const NUMBER_OF_QUESTIONS = 10;
