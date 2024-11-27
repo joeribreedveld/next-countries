@@ -95,7 +95,7 @@ export default function Question({
         alt="Flag"
         width={288}
         height={192}
-        className="mt-16 aspect-video h-48 rounded-md object-cover"
+        className="mt-12 aspect-video h-48 rounded-md object-cover sm:mt-16"
       />
       <RadioGroup
         value={selectedCountry}
@@ -141,7 +141,7 @@ export default function Question({
           </Label>
         ))}
       </RadioGroup>
-      <div className="mt-16 flex w-full items-center justify-between">
+      <div className="mt-12 flex w-full items-center justify-between sm:mt-16">
         {state === "default" || state === "correct" ? (
           <Button
             variant="secondary"
