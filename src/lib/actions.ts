@@ -1,5 +1,13 @@
+const API_URL = `${
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : process.env.VERCEL_URL
+}/api/countries`;
+const NUMBER_OF_CHOICES = 4;
+const NUMBER_OF_QUESTIONS = 10;
+
 export async function getCountries() {
-  const response = await fetch("http://localhost:3000/api/countries");
+  const response = await fetch(API_URL);
 
   if (!response.ok) {
     throw new Error("Failed to fetch countries");
@@ -16,7 +24,7 @@ export async function getQuestion() {
   const choices = [];
   const usedIndices = new Set<number>();
 
-  while (choices.length < 4) {
+  while (choices.length < NUMBER_OF_CHOICES) {
     const randomIndex = Math.floor(Math.random() * countries.length);
     if (!usedIndices.has(randomIndex)) {
       usedIndices.add(randomIndex);
@@ -24,7 +32,17 @@ export async function getQuestion() {
     }
   }
 
-  const country = choices[Math.floor(Math.random() * choices.length)];
+  const answer = choices[Math.floor(Math.random() * choices.length)];
 
-  return { country, choices };
+  return { answer, choices };
+}
+
+export async function getQuestions() {
+  const questions = [];
+
+  for (let i = 0; i < NUMBER_OF_QUESTIONS; i++) {
+    questions.push(await getQuestion());
+  }
+
+  return questions;
 }
