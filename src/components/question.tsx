@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { TCountry } from "@/lib/types";
 import { cva } from "class-variance-authority";
+import { CircleCheck } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -17,6 +18,7 @@ const labelVariants = cva(
         selected: "border-blue-400 bg-blue-50 text-blue-600",
         correct: "border-green-400 bg-green-50 text-green-600",
         incorrect: "border-red-400 bg-red-50 text-red-600",
+        correctHighlight: "border-green-400 bg-green-50 text-green-600",
       },
     },
     defaultVariants: {
@@ -30,8 +32,10 @@ const radioItemVariants = cva("h-4 w-4 text-inherit", {
     state: {
       default: "",
       selected: "border-blue-600 bg-white fill-blue-600 text-blue-600",
-      correct: "border-green-600 bg-green-50 fill-green-600 text-green-600",
-      incorrect: "border-red-600 bg-red-50 fill-red-600 text-red-600",
+      correct: "border-green-600 bg-white fill-green-600 text-green-600",
+      incorrect: "border-red-600 bg-white fill-red-600 text-red-600",
+      correctHighlight:
+        "border-green-600 bg-white fill-green-600 text-green-600",
     },
   },
   defaultVariants: {
@@ -116,12 +120,17 @@ export default function Question({
                   : state === "incorrect" &&
                       selectedCountry === choice.name.common
                     ? "incorrect"
-                    : selectedCountry === choice.name.common
-                      ? "selected"
-                      : "default",
+                    : state === "incorrect" &&
+                        choice.name.common ===
+                          currentQuestion.answer.name.common
+                      ? "correctHighlight"
+                      : selectedCountry === choice.name.common
+                        ? "selected"
+                        : "default",
             })}
           >
             <span className="line-clamp-1 text-sm">{choice.name.common}</span>
+
             <RadioGroupItem
               value={choice.name.common}
               id={choice.name.common}
@@ -132,35 +141,28 @@ export default function Question({
                     : state === "incorrect" &&
                         selectedCountry === choice.name.common
                       ? "incorrect"
-                      : selectedCountry === choice.name.common
-                        ? "selected"
-                        : "default",
+                      : state === "incorrect" &&
+                          choice.name.common ===
+                            currentQuestion.answer.name.common
+                        ? "correctHighlight"
+                        : selectedCountry === choice.name.common
+                          ? "selected"
+                          : "default",
               })}
-              disabled={state !== "default"}
             />
           </Label>
         ))}
       </RadioGroup>
-      <div className="mt-12 flex w-full items-center justify-between sm:mt-16">
-        {state === "default" || state === "correct" ? (
-          <Button
-            variant="secondary"
-            size="lg"
-            className="bg-border text-muted-foreground hover:bg-border/90"
-            onClick={handleNextQuestion}
-            disabled={state === "correct" || selectedCountry !== ""}
-          >
-            Skip
-          </Button>
-        ) : (
-          <p className="text-sm text-muted-foreground">
-            The correct answer is{" "}
-            <span className="font-semibold">
-              {currentQuestion.answer.name.common}
-            </span>
-          </p>
-        )}
-
+      <div className="mt-12 flex w-full items-center justify-between gap-12 sm:mt-16">
+        <Button
+          variant="secondary"
+          size="lg"
+          className="bg-border text-muted-foreground hover:bg-border/90"
+          onClick={handleNextQuestion}
+          disabled={state !== "default"}
+        >
+          Skip
+        </Button>
         <Button
           size="lg"
           onClick={state === "default" ? handleQuestion : handleNextQuestion}
