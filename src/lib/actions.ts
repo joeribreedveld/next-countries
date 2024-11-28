@@ -7,7 +7,11 @@ const NUMBER_OF_CHOICES = 4;
 const NUMBER_OF_QUESTIONS = 10;
 
 export async function getCountries() {
-  const response = await fetch(API_URL);
+  const response = await fetch(API_URL, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch countries");

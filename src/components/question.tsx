@@ -5,7 +5,6 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { TCountry } from "@/lib/types";
 import { cva } from "class-variance-authority";
-import { CircleCheck } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
