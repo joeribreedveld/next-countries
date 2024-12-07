@@ -139,6 +139,10 @@ export default function Question({
           <Button
             size="lg"
             variant="secondary"
+            disabled={
+              Object.values(results).filter((result) => result.correct)
+                .length === questions.length
+            }
             onClick={handleRetry}
             className="bg-border text-muted-foreground hover:bg-border/90"
           >
