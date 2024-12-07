@@ -85,6 +85,13 @@ export default function Question({
     refresh();
   }
 
+  function handleRetry() {
+    setQuestionIndex(0);
+    setSelectedCountry("");
+    setState("default");
+    setResults({});
+  }
+
   function handleQuestion() {
     if (!selectedCountry) return;
 
@@ -128,15 +135,25 @@ export default function Question({
             %
           </div>
         </div>
-        <form action={handleRestart}>
+        <div className="mt-12 flex w-full items-center justify-between sm:mt-16">
           <Button
             size="lg"
-            type="submit"
-            className="mt-12 bg-primary text-white hover:bg-primary/90 sm:mt-16"
+            variant="secondary"
+            onClick={handleRetry}
+            className="bg-border text-muted-foreground hover:bg-border/90"
           >
-            Restart
+            Retry
           </Button>
-        </form>
+          <form action={handleRestart}>
+            <Button
+              size="lg"
+              type="submit"
+              className="bg-primary text-white hover:bg-primary/90"
+            >
+              Reset
+            </Button>
+          </form>
+        </div>
       </>
     );
   }
