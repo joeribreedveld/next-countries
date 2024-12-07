@@ -130,48 +130,19 @@ export default function Question({
     return (
       <>
         <h1 className="text-2xl font-semibold">Results</h1>
-        <ul className="mt-12 grid gap-3 sm:mt-16">
-          {questions.map((question) => (
-            <li
-              key={question.answer.name.common}
-              className="flex items-center justify-between gap-8 rounded-md border bg-white p-4"
-            >
-              <div className="flex items-center gap-6">
-                <Image
-                  src={question.answer.flags.svg}
-                  alt="Flag"
-                  width={72}
-                  height={48}
-                  className="aspect-video h-10 w-16 rounded-sm object-cover sm:h-12 sm:w-20"
-                />
-                <h2 className="text-sm font-semibold">
-                  {question.answer.name.common}
-                  {!results[question.answer.name.common]?.correct &&
-                    results[question.answer.name.common]?.selected && (
-                      <span className="ml-4 hidden font-medium text-muted-foreground line-through sm:block">
-                        {results[question.answer.name.common].selected}
-                      </span>
-                    )}
-                </h2>
-              </div>
-              <Badge
-                className={badgeVariants({
-                  status: results[question.answer.name.common]?.correct
-                    ? "correct"
-                    : results[question.answer.name.common]?.selected
-                      ? "incorrect"
-                      : "skipped",
-                })}
-              >
-                {results[question.answer.name.common]?.correct
-                  ? "Correct"
-                  : results[question.answer.name.common]?.selected
-                    ? "Incorrect"
-                    : "Skipped"}
-              </Badge>
-            </li>
-          ))}
-        </ul>
+        {/* like duolingo how much % you scored */}
+        <div className="mt-12 sm:mt-16">
+          <div className="w-32 rounded-md border border-green-400 bg-green-50 p-4 text-center text-green-600">
+            {/* calculate percentage of correct */}
+            {Math.round(
+              (Object.values(results).filter((result) => result.correct)
+                .length /
+                questions.length) *
+                100,
+            )}
+            %
+          </div>
+        </div>
         <form action={handleRestart}>
           <Button
             size="lg"
