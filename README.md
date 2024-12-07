@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next Countries
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app). It is a quiz application that tests your knowledge of country flags.
 
 ## Getting Started
 
@@ -16,9 +18,22 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You can start editing the page by modifying [`src/app/page.tsx`](src/app/page.tsx). The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
+
+- `src/app/`: Contains the main application pages.
+- `src/components/`: Contains the React components used throughout the application.
+- `src/lib/`: Contains utility functions and types.
+- `public/`: Contains static assets such as images and icons.
+
+## API
+
+The project fetches country data from the [REST Countries API](https://restcountries.com/).
+
+## Styling
+
+This project uses [Tailwind CSS](https://tailwindcss.com/) for styling. The configuration can be found in [`tailwind.config.ts`](tailwind.config.ts).
 
 ## Learn More
 
