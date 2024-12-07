@@ -1,3 +1,5 @@
+import { TCountry } from "@/lib/types";
+
 const API_URL = `${
   process.env.NODE_ENV === "development"
     ? "http://localhost:3000"
@@ -22,17 +24,16 @@ export async function getCountries() {
   return data;
 }
 
-export async function getQuestion() {
-  const countries = await getCountries();
-
+export async function getQuestion(availableCountries: TCountry[]) {
   const choices = [];
   const usedIndices = new Set<number>();
 
+  // Select random countries for choices
   while (choices.length < NUMBER_OF_CHOICES) {
-    const randomIndex = Math.floor(Math.random() * countries.length);
+    const randomIndex = Math.floor(Math.random() * availableCountries.length);
     if (!usedIndices.has(randomIndex)) {
       usedIndices.add(randomIndex);
-      choices.push(countries[randomIndex]);
+      choices.push(availableCountries[randomIndex]);
     }
   }
 
@@ -42,10 +43,26 @@ export async function getQuestion() {
 }
 
 export async function getQuestions() {
+  const countries = await getCountries();
   const questions = [];
+  const usedAnswers = new Set<string>();
 
-  for (let i = 0; i < NUMBER_OF_QUESTIONS; i++) {
-    questions.push(await getQuestion());
+  // Create unique questions
+  while (questions.length < NUMBER_OF_QUESTIONS) {
+    const availableCountries = countries.filter(
+      (country: TCountry) => !usedAnswers.has(country.name.common),
+    );
+
+    // Check if there are enough available countries left to form a question
+    if (availableCountries.length < NUMBER_OF_CHOICES) {
+      throw new Error("Not enough unique countries to generate questions");
+    }
+
+    const question = await getQuestion(availableCountries);
+
+    // Add the answer to the usedAnswers set to avoid duplicates
+    usedAnswers.add(question.answer.name.common);
+    questions.push(question);
   }
 
   return questions;

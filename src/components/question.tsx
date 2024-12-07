@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -55,6 +56,22 @@ const buttonStateVariants = cva("bg-primary text-white hover:bg-primary/90", {
   },
 });
 
+const badgeVariants = cva(
+  "h-6 !max-w-5 py-0 px-0 !max-h-5 overflow-hidden rounded-full !text-transparent",
+  {
+    variants: {
+      status: {
+        correct: "sm:bg-green-100 bg-green-200 border-green-400 text-green-600",
+        incorrect: "sm:bg-red-100 bg-red-200 border-red-400 text-red-600",
+        skipped: "sm:bg-zinc-100 bg-zinc-200 border-zinc-400 text-zinc-600",
+      },
+    },
+    defaultVariants: {
+      status: "correct",
+    },
+  },
+);
+
 export default function Question({
   questions,
 }: {
@@ -65,20 +82,35 @@ export default function Question({
 }) {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [selectedCountry, setSelectedCountry] = useState("");
-  const [state, setState] = useState<"default" | "correct" | "incorrect">(
-    "default",
-  );
+  const [state, setState] = useState<
+    "default" | "correct" | "incorrect" | "finished"
+  >("default");
+  const [results, setResults] = useState<{
+    [key: string]: { correct: boolean; selected?: string };
+  }>({});
 
   const currentQuestion = questions[questionIndex];
+
+  function handleRestart() {
+    setQuestionIndex(0);
+    setSelectedCountry("");
+    setState("default");
+    setResults({});
+  }
 
   function handleQuestion() {
     if (!selectedCountry) return;
 
-    setState(
-      selectedCountry === currentQuestion.answer.name.common
-        ? "correct"
-        : "incorrect",
-    );
+    const isCorrect = selectedCountry === currentQuestion.answer.name.common;
+    setState(isCorrect ? "correct" : "incorrect");
+
+    setResults((prev) => ({
+      ...prev,
+      [currentQuestion.answer.name.common]: {
+        correct: isCorrect,
+        selected: !isCorrect ? selectedCountry : undefined,
+      },
+    }));
   }
 
   function handleNextQuestion() {
@@ -87,12 +119,70 @@ export default function Question({
       setSelectedCountry("");
       setState("default");
     } else {
-      console.log("All questions are completed!");
+      setState("finished");
     }
+  }
+
+  if (state === "finished") {
+    return (
+      <>
+        <h1 className="text-2xl font-semibold">Results</h1>
+        <ul className="mt-12 grid gap-3 sm:mt-16">
+          {questions.map((question) => (
+            <li
+              key={question.answer.name.common}
+              className="flex items-center justify-between gap-8 rounded-md border bg-white p-4"
+            >
+              <div className="flex items-center gap-6">
+                <Image
+                  src={question.answer.flags.svg}
+                  alt="Flag"
+                  width={72}
+                  height={48}
+                  className="aspect-video h-10 w-16 rounded-sm object-cover sm:h-12 sm:w-20"
+                />
+                <h2 className="text-sm font-semibold">
+                  {question.answer.name.common}
+                  {!results[question.answer.name.common]?.correct &&
+                    results[question.answer.name.common]?.selected && (
+                      <span className="ml-4 hidden font-medium text-muted-foreground line-through sm:block">
+                        {results[question.answer.name.common].selected}
+                      </span>
+                    )}
+                </h2>
+              </div>
+              <Badge
+                className={badgeVariants({
+                  status: results[question.answer.name.common]?.correct
+                    ? "correct"
+                    : results[question.answer.name.common]?.selected
+                      ? "incorrect"
+                      : "skipped",
+                })}
+              >
+                {results[question.answer.name.common]?.correct
+                  ? "Correct"
+                  : results[question.answer.name.common]?.selected
+                    ? "Incorrect"
+                    : "Skipped"}
+              </Badge>
+            </li>
+          ))}
+        </ul>
+        <Button
+          size="lg"
+          onClick={() => handleRestart()}
+          className="mt-12 bg-primary text-white hover:bg-primary/90 sm:mt-16"
+        >
+          Restart
+        </Button>
+      </>
+    );
   }
 
   return (
     <>
+      <h1 className="text-2xl font-semibold">What country is this?</h1>
       <Image
         src={currentQuestion.answer.flags.svg}
         alt="Flag"
