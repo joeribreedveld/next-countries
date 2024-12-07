@@ -31,7 +31,6 @@ export async function getQuestion(availableCountries: TCountry[]) {
   const choices = [];
   const usedIndices = new Set<number>();
 
-  // Select random countries for choices
   while (choices.length < NUMBER_OF_CHOICES) {
     const randomIndex = Math.floor(Math.random() * availableCountries.length);
     if (!usedIndices.has(randomIndex)) {
@@ -50,20 +49,17 @@ export async function getQuestions() {
   const questions = [];
   const usedAnswers = new Set<string>();
 
-  // Create unique questions
   while (questions.length < NUMBER_OF_QUESTIONS) {
     const availableCountries = countries.filter(
       (country: TCountry) => !usedAnswers.has(country.name.common),
     );
 
-    // Check if there are enough available countries left to form a question
     if (availableCountries.length < NUMBER_OF_CHOICES) {
       throw new Error("Not enough unique countries to generate questions");
     }
 
     const question = await getQuestion(availableCountries);
 
-    // Add the answer to the usedAnswers set to avoid duplicates
     usedAnswers.add(question.answer.name.common);
     questions.push(question);
   }

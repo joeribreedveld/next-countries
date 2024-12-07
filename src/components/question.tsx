@@ -121,11 +121,9 @@ export default function Question({
     return (
       <>
         <h1 className="text-2xl font-semibold">Results</h1>
-        {/* like duolingo how much % you scored */}
         <div className="mt-12 sm:mt-16">
           <div className="flex h-32 w-64 flex-col items-center justify-center gap-2 rounded-md border bg-white text-center text-sm">
             <TargetIcon className="h-4 w-4 text-muted-foreground" />
-            {/* calculate percentage of correct */}
             {Math.round(
               (Object.values(results).filter((result) => result.correct)
                 .length /
