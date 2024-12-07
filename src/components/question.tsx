@@ -1,12 +1,12 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { refresh } from "@/lib/actions";
 import { TCountry } from "@/lib/types";
 import { cva } from "class-variance-authority";
+import { TargetIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -56,22 +56,6 @@ const buttonStateVariants = cva("bg-primary text-white hover:bg-primary/90", {
     state: "default",
   },
 });
-
-const badgeVariants = cva(
-  "h-6 !max-w-5 py-0 px-0 !max-h-5 overflow-hidden rounded-full !text-transparent",
-  {
-    variants: {
-      status: {
-        correct: "sm:bg-green-100 bg-green-200 border-green-400 text-green-600",
-        incorrect: "sm:bg-red-100 bg-red-200 border-red-400 text-red-600",
-        skipped: "sm:bg-zinc-100 bg-zinc-200 border-zinc-400 text-zinc-600",
-      },
-    },
-    defaultVariants: {
-      status: "correct",
-    },
-  },
-);
 
 export default function Question({
   questions,
@@ -132,7 +116,8 @@ export default function Question({
         <h1 className="text-2xl font-semibold">Results</h1>
         {/* like duolingo how much % you scored */}
         <div className="mt-12 sm:mt-16">
-          <div className="w-32 rounded-md border border-green-400 bg-green-50 p-4 text-center text-green-600">
+          <div className="flex h-32 w-64 flex-col items-center justify-center gap-2 rounded-md border bg-white text-center text-sm">
+            <TargetIcon className="h-4 w-4 text-muted-foreground" />
             {/* calculate percentage of correct */}
             {Math.round(
               (Object.values(results).filter((result) => result.correct)
