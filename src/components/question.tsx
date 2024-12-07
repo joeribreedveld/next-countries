@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { refresh } from "@/lib/actions";
 import { TCountry } from "@/lib/types";
 import { cva } from "class-variance-authority";
 import Image from "next/image";
@@ -91,11 +92,13 @@ export default function Question({
 
   const currentQuestion = questions[questionIndex];
 
-  function handleRestart() {
+  async function handleRestart() {
     setQuestionIndex(0);
     setSelectedCountry("");
     setState("default");
     setResults({});
+
+    refresh();
   }
 
   function handleQuestion() {
@@ -169,13 +172,15 @@ export default function Question({
             </li>
           ))}
         </ul>
-        <Button
-          size="lg"
-          onClick={() => handleRestart()}
-          className="mt-12 bg-primary text-white hover:bg-primary/90 sm:mt-16"
-        >
-          Restart
-        </Button>
+        <form action={handleRestart}>
+          <Button
+            size="lg"
+            type="submit"
+            className="mt-12 bg-primary text-white hover:bg-primary/90 sm:mt-16"
+          >
+            Restart
+          </Button>
+        </form>
       </>
     );
   }

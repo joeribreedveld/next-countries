@@ -1,4 +1,7 @@
+"use server";
+
 import { TCountry } from "@/lib/types";
+import { revalidatePath } from "next/cache";
 
 const API_URL = `${
   process.env.NODE_ENV === "development"
@@ -66,4 +69,8 @@ export async function getQuestions() {
   }
 
   return questions;
+}
+
+export async function refresh() {
+  revalidatePath("/");
 }
